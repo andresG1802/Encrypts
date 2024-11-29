@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'securepass',
-    "rest_framework_api_key",
+    'securepass'
 ]
 
 MIDDLEWARE = [

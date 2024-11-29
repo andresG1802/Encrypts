@@ -2,7 +2,7 @@ import numpy as np
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
-
+# Llave maestra
 # 1. Matriz de transformación y su inversa
 transformation_matrix = np.array([
     [3, 1, 4],
@@ -89,21 +89,21 @@ def decrypt_with_aes(ciphertext: bytes, key: bytes, iv: bytes) -> np.ndarray:
 
 def EncryptsMain(plaintext):
     
-
     # Clave y IV para AES
-    key = get_random_bytes(16)  # Clave de 128 bits
-    iv = get_random_bytes(16)   # Vector de inicialización
-
-    # Transformación lineal
+    
+    key = get_random_bytes(16)
+    iv = get_random_bytes(16)
     transformed_vector = linear_transform(plaintext)
-    # print("Vector transformado:", transformed_vector)
-
-    # Encriptar con AES
     ciphertext = encrypt_with_aes(transformed_vector, key, iv)
-    # print("Texto encriptado (AES):", ciphertext.hex())
 
-
+    # Devolver ciphertext junto con key e iv
+    return {
+        "ciphertext_hex": ciphertext.hex(),
+        "key_hex": key.hex(),
+        "iv_hex": iv.hex()
+    }
     return ciphertext.hex()
+
     # # Desencriptar con AES
     # decrypted_vector = decrypt_with_aes(ciphertext, key, iv)
     # print("Vector desencriptado:", decrypted_vector)
@@ -112,3 +112,15 @@ def EncryptsMain(plaintext):
     # original_text = reverse_linear_transform(decrypted_vector)
     # print("Texto original:", original_text)
 
+def Desencryptar(ciphertext_hex,key_hex, iv_hex):
+
+    ciphertext = bytes.fromhex(ciphertext_hex)
+    key = bytes.fromhex(key_hex)
+    iv = bytes.fromhex(iv_hex)
+
+    # Desencriptar con AES
+    decrypted_vector = decrypt_with_aes(ciphertext, key, iv)
+
+    # Revertir la transformación lineal
+    original_text = reverse_linear_transform(decrypted_vector)
+    return original_text
